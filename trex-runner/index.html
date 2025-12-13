@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-Rex Runner | 小遊戲區</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>T-Rex Runner</h1>
+        
+        <div class="game-controls-header">
+            <div class="setting-group">
+                <label for="difficulty">難度：</label>
+                <select id="difficulty">
+                    <option value="easy">簡單 (Easy)</option>
+                    <option value="hard">困難 (Hard)</option>
+                </select>
+            </div>
+            <div class="score-display">
+                <span>最高分: <span id="highScore">0</span></span>
+                <span>當前分數: <span id="currentScore">0</span></span>
+            </div>
+        </div>
+
+        <div class="game-container">
+            <canvas id="gameCanvas" width="800" height="300"></canvas>
+            
+            <div id="startScreen" class="overlay">
+                <h2>準備好了嗎？</h2>
+                <p>按下 <span class="key-hint">空白鍵</span> 或 <span class="key-hint">點擊畫面</span> 開始</p>
+            </div>
+
+            <div id="gameOverScreen" class="overlay" style="display: none;">
+                <h2>遊戲結束</h2>
+                <p>得分: <span id="finalScore">0</span></p>
+                <button id="restartBtn" class="btn primary">再玩一次</button>
+            </div>
+        </div>
+
+        <div class="controls">
+            <p class="instruction">操作說明：按下 <b>空白鍵 (Space)</b> 或 <b>向上鍵 (↑)</b> 跳躍</p>
+            <a href="../index.html" class="btn secondary">回到大廳</a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

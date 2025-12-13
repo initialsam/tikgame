@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>井字遊戲 | 小遊戲區</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>井字遊戲</h1>
+        
+        <!-- 遊戲設定區域 -->
+        <div class="settings-panel">
+            <div class="setting-group">
+                <label>對戰模式：</label>
+                <select id="gameMode">
+                    <option value="pvp">雙人對戰 (PvP)</option>
+                    <option value="pvc">單人對戰 (PvC)</option>
+                </select>
+            </div>
+            <div class="setting-group" id="difficultyGroup" style="display: none;">
+                <label>電腦難度：</label>
+                <select id="difficulty">
+                    <option value="easy">簡單 (弱)</option>
+                    <option value="hard">困難 (強)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 戰績顯示 -->
+        <div class="score-board">
+            <div class="score-item">
+                <span id="p1Name">玩家 (X)</span>
+                <span id="scoreX">0</span>
+            </div>
+            <div class="score-item">
+                <span>平手</span>
+                <span id="scoreDraw">0</span>
+            </div>
+            <div class="score-item">
+                <span id="p2Name">玩家 2 (O)</span>
+                <span id="scoreO">0</span>
+            </div>
+        </div>
+
+        <div class="game-info">
+            <span id="status">輪到玩家: X</span>
+        </div>
+
+        <div class="board" id="board">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+
+        <div class="controls">
+            <button id="restartBtn" class="btn primary">重新開始本局</button>
+            <button id="resetScoreBtn" class="btn secondary">重置戰績</button>
+            <a href="../index.html" class="btn secondary">回到大廳</a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
