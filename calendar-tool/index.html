@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>月曆小工具</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="tool-header">
+            <a href="../index.html" class="back-btn">← 返回</a>
+            <h1>📅 月曆小工具</h1>
+        </header>
+
+        <main class="calendar-main">
+            <div class="controls-panel">
+                <div class="control-group">
+                    <label for="yearInput">年份：</label>
+                    <input type="number" id="yearInput" min="1900" max="2100" value="2025">
+                </div>
+
+                <div class="control-group">
+                    <label for="monthInput">月份：</label>
+                    <select id="monthInput">
+                        <option value="0">1月</option>
+                        <option value="1">2月</option>
+                        <option value="2">3月</option>
+                        <option value="3">4月</option>
+                        <option value="4">5月</option>
+                        <option value="5">6月</option>
+                        <option value="6">7月</option>
+                        <option value="7">8月</option>
+                        <option value="8">9月</option>
+                        <option value="9">10月</option>
+                        <option value="10">11月</option>
+                        <option value="11">12月</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="startDay">起始天：</label>
+                    <select id="startDay">
+                        <option value="0">週日</option>
+                        <option value="1">週一</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="bgImage">背景圖片：</label>
+                    <input type="file" id="bgImage" accept="image/*">
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="downloadBtn" class="btn primary">📸 下載圖檔</button>
+                <button id="exportBtn" class="btn secondary">📤 匯出設定</button>
+                <button id="importBtn" class="btn secondary">📥 匯入設定</button>
+                <input type="file" id="importInput" accept=".json" style="display: none;">
+            </div>
+
+            <div class="calendar-container">
+                <div class="calendar-card" id="calendarCard">
+                    <div class="calendar-image" id="calendarImage">
+                        <!-- Image will be set as background here -->
+                    </div>
+                    <div class="calendar-body">
+                        <div class="calendar-header">
+                            <h2 id="calendarTitle">2025 January</h2>
+                        </div>
+                        <div class="weekdays" id="weekdaysContainer"></div>
+                        <div class="calendar-grid" id="calendarGrid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Note Input Modal -->
+            <div id="noteModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h3>新增備註</h3>
+                    <p id="modalDateDisplay"></p>
+                    <input type="text" id="noteInput" placeholder="輸入備註 (例如: 生日, 聚餐)" maxlength="10">
+                    
+                    <div class="color-selector">
+                        <p>選擇標籤顏色：</p>
+                        <div class="color-options">
+                            <div class="color-option selected" data-color="#ffffff" style="background-color: #ffffff; border: 1px solid #ddd;"></div> <!-- Default/None -->
+                            <div class="color-option" data-color="#ffcdd2" style="background-color: #ffcdd2;"></div> <!-- Red -->
+                            <div class="color-option" data-color="#ffe0b2" style="background-color: #ffe0b2;"></div> <!-- Orange -->
+                            <div class="color-option" data-color="#fff9c4" style="background-color: #fff9c4;"></div> <!-- Yellow -->
+                            <div class="color-option" data-color="#c8e6c9" style="background-color: #c8e6c9;"></div> <!-- Green -->
+                            <div class="color-option" data-color="#b3e5fc" style="background-color: #b3e5fc;"></div> <!-- Blue -->
+                            <div class="color-option" data-color="#e1bee7" style="background-color: #e1bee7;"></div> <!-- Purple -->
+                        </div>
+                    </div>
+
+                    <div class="modal-buttons">
+                        <button id="saveNoteBtn" class="btn primary">儲存</button>
+                        <button id="deleteNoteBtn" class="btn secondary">刪除</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <span class="legend-item">
+                    <span class="legend-color holiday"></span>
+                    <span>台灣放假日</span>
+                </span>
+            </div>
+        </main>
+
+        <footer class="tool-footer">
+            <p>&copy; 2025 月曆小工具</p>
+        </footer>
+    </div>
+
+    <script src="html2canvas.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

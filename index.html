@@ -9,11 +9,18 @@
 <body>
     <div class="container">
         <header class="main-header">
-            <h1>🎮 網頁小遊戲區</h1>
-            <p>選擇一款遊戲開始遊玩吧！</p>
+            <h1>🎮 網頁遊戲與工具</h1>
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-tab="games">🎮 遊戲</button>
+                <button class="tab-btn" data-tab="tools">🛠️ 小工具</button>
+            </div>
         </header>
 
-        <main class="game-list">
+        <main class="content">
+            <section id="games" class="tab-content active">
+                <h2>網頁小遊戲區</h2>
+                <p>選擇一款遊戲開始遊玩吧！</p>
+                <div class="game-list">
             <!-- 遊戲卡片 1: 井字遊戲 -->
             <a href="tic-tac-toe/index.html" class="game-card">
                 <div class="game-icon">❌⭕</div>
@@ -31,22 +38,27 @@
                     <p>經典恐龍快跑，挑戰最高分！</p>
                 </div>
             </a>
-
-            <!-- 未來可以新增更多遊戲卡片 -->
-            <!-- 
-            <a href="#" class="game-card coming-soon">
-                <div class="game-icon">🐍</div>
-                <div class="game-details">
-                    <h2>貪食蛇</h2>
-                    <p>Coming Soon...</p>
                 </div>
-            </a>
-            -->
+            </section>
+
+            <section id="tools" class="tab-content">
+                <h2>網路小工具區</h2>
+                <p>實用的網路小工具，等待探索！</p>
+                <div class="game-list">
+                    <a href="calendar-tool/index.html" class="game-card">
+                        <div class="game-icon">📅</div>
+                        <div class="game-details">
+                            <h2>月曆小工具</h2>
+                            <p>自訂月曆，標記台灣放假日</p>
+                        </div>
+                    </a>
+                </div>
+            </section>
         </main>
 
         <footer class="main-footer">
-            <p>&copy; 2025 網頁小遊戲區</p>
+            <p>&copy; 2025 網頁遊戲與工具</p>
         </footer>
     </div>
-</body>
-</html>
+
+    <script src="script.js"></script>
