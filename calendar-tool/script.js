@@ -4,10 +4,14 @@ class CalendarTool {
         this.monthInput = document.getElementById('monthInput');
         this.startDayInput = document.getElementById('startDay');
         this.bgImageInput = document.getElementById('bgImage');
+        this.showTaiwanHolidaysCheckbox = document.getElementById('showTaiwanHolidays');
+        this.showJapanHolidaysCheckbox = document.getElementById('showJapanHolidays');
         this.calendarGrid = document.getElementById('calendarGrid');
         this.weekdaysContainer = document.getElementById('weekdaysContainer');
         this.calendarTitle = document.getElementById('calendarTitle');
         this.calendarImage = document.getElementById('calendarImage');
+        this.prevMonthBtn = document.getElementById('prevMonthBtn');
+        this.nextMonthBtn = document.getElementById('nextMonthBtn');
         
         // Modal elements
         this.modal = document.getElementById('noteModal');
@@ -29,6 +33,8 @@ class CalendarTool {
         this.currentSelectedColor = '#ffffff';
         this.notes = JSON.parse(localStorage.getItem('calendarNotes')) || {};
         this.currentBgImageData = null; // Store base64 image data
+        this.holidayData = {}; // Store Taiwan holiday data
+        this.japanHolidayData = {}; // Store Japan holiday data
 
         this.weekdayLabelsEN = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
         this.monthNamesEN = [
@@ -40,10 +46,25 @@ class CalendarTool {
     }
 
     init() {
-        this.yearInput.addEventListener('change', () => this.renderCalendar());
+        this.yearInput.addEventListener('change', () => this.loadHolidaysAndRender());
         this.monthInput.addEventListener('change', () => this.renderCalendar());
         this.startDayInput.addEventListener('change', () => this.renderCalendar());
         this.bgImageInput.addEventListener('change', (e) => this.handleImageUpload(e));
+        this.showTaiwanHolidaysCheckbox.addEventListener('change', () => this.loadHolidaysAndRender());
+        this.showJapanHolidaysCheckbox.addEventListener('change', () => this.loadHolidaysAndRender());
+        this.prevMonthBtn.addEventListener('click', () => this.prevMonth());
+        this.nextMonthBtn.addEventListener('click', () => this.nextMonth());
+        
+        // Keyboard shortcuts
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                this.prevMonth();
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                this.nextMonth();
+            }
+        });
         
         // Action buttons events
         this.downloadBtn.addEventListener('click', () => this.downloadImage());
@@ -72,7 +93,133 @@ class CalendarTool {
         this.yearInput.value = today.getFullYear();
         this.monthInput.value = today.getMonth();
 
+        this.loadHolidaysAndRender();
+    }
+
+    prevMonth() {
+        let month = parseInt(this.monthInput.value);
+        let year = parseInt(this.yearInput.value);
+        
+        month--;
+        if (month < 0) {
+            month = 11;
+            year--;
+            this.yearInput.value = year;
+        }
+        this.monthInput.value = month;
+        this.loadHolidaysAndRender();
+    }
+
+    nextMonth() {
+        let month = parseInt(this.monthInput.value);
+        let year = parseInt(this.yearInput.value);
+        
+        month++;
+        if (month > 11) {
+            month = 0;
+            year++;
+            this.yearInput.value = year;
+        }
+        this.monthInput.value = month;
+        this.loadHolidaysAndRender();
+    }
+
+    async loadHolidaysAndRender() {
+        const year = parseInt(this.yearInput.value);
+        const currentYear = new Date().getFullYear();
+        
+        // Only load Taiwan holiday API for current year and next year
+        if (this.showTaiwanHolidaysCheckbox.checked && 
+            (year === currentYear || year === currentYear + 1) && 
+            !this.holidayData[year]) {
+            try {
+                const response = await fetch(`https://cdn.jsdelivr.net/gh/ruyut/TaiwanCalendar/data/${year}.json`);
+                if (response.ok) {
+                    const data = await response.json();
+                    this.holidayData[year] = {};
+                    data.forEach(day => {
+                        if (day.isHoliday) {
+                            const dateStr = day.date; // format: "20250101"
+                            const month = parseInt(dateStr.substring(4, 6)) - 1;
+                            const dayNum = parseInt(dateStr.substring(6, 8));
+                            this.holidayData[year][`${month}-${dayNum}`] = day.description || '假日';
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to load Taiwan holiday data:', error);
+            }
+        }
+        
+        // Load Japan holiday data if checkbox is checked
+        if (this.showJapanHolidaysCheckbox.checked && 
+            (year === currentYear || year === currentYear + 1) && 
+            !this.japanHolidayData[year]) {
+            try {
+                const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/jp`);
+                if (response.ok) {
+                    const data = await response.json();
+                    this.japanHolidayData[year] = {};
+                    data.forEach(holiday => {
+                        const dateStr = holiday.date; // format: "2025-01-01"
+                        const [y, m, d] = dateStr.split('-');
+                        const month = parseInt(m) - 1;
+                        const dayNum = parseInt(d);
+                        this.japanHolidayData[year][`${month}-${dayNum}`] = holiday.localName || holiday.name;
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to load Japan holiday data:', error);
+            }
+        }
+        
         this.renderCalendar();
+    }
+
+    isHoliday(year, month, day) {
+        const currentYear = new Date().getFullYear();
+        if (!this.showTaiwanHolidaysCheckbox.checked) return false;
+        // Only check API data for current year and next year
+        if (year === currentYear || year === currentYear + 1) {
+            if (this.holidayData[year]) {
+                return this.holidayData[year][`${month}-${day}`] !== undefined;
+            }
+        }
+        return false;
+    }
+
+    getHolidayName(year, month, day) {
+        const currentYear = new Date().getFullYear();
+        if (!this.showTaiwanHolidaysCheckbox.checked) return null;
+        // Only check API data for current year and next year
+        if (year === currentYear || year === currentYear + 1) {
+            if (this.holidayData[year]) {
+                return this.holidayData[year][`${month}-${day}`] || null;
+            }
+        }
+        return null;
+    }
+
+    isJapanHoliday(year, month, day) {
+        const currentYear = new Date().getFullYear();
+        if (!this.showJapanHolidaysCheckbox.checked) return false;
+        if (year === currentYear || year === currentYear + 1) {
+            if (this.japanHolidayData[year]) {
+                return this.japanHolidayData[year][`${month}-${day}`] !== undefined;
+            }
+        }
+        return false;
+    }
+
+    getJapanHolidayName(year, month, day) {
+        const currentYear = new Date().getFullYear();
+        if (!this.showJapanHolidaysCheckbox.checked) return null;
+        if (year === currentYear || year === currentYear + 1) {
+            if (this.japanHolidayData[year]) {
+                return this.japanHolidayData[year][`${month}-${day}`] || null;
+            }
+        }
+        return null;
     }
 
     downloadImage() {
@@ -295,12 +442,38 @@ class CalendarTool {
             displayMonth = 0;
         }
 
-        // Check if it's a weekend (Saturday or Sunday)
+        // Check if it's a weekend (Saturday or Sunday) or holiday
         const date = new Date(displayYear, displayMonth, day);
         const dayOfWeek = date.getDay(); // 0 is Sunday, 6 is Saturday
+        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+        const isHolidayDay = this.isHoliday(displayYear, displayMonth, day);
+        const holidayName = this.getHolidayName(displayYear, displayMonth, day);
+        const isJapanHolidayDay = this.isJapanHoliday(displayYear, displayMonth, day);
+        const japanHolidayName = this.getJapanHolidayName(displayYear, displayMonth, day);
         
-        if ((dayOfWeek === 0 || dayOfWeek === 6) && !isOtherMonth) {
+        if (isWeekend && !isOtherMonth) {
             dayElement.classList.add('weekend');
+        }
+
+        // Only add holiday class if it's not a weekend
+        if (isHolidayDay && !isOtherMonth && !isWeekend) {
+            dayElement.classList.add('taiwan-holiday');
+        }
+
+        if (isJapanHolidayDay && !isOtherMonth && !isWeekend) {
+            dayElement.classList.add('japan-holiday');
+        }
+
+        // Add tooltip for holidays
+        const tooltips = [];
+        if (holidayName && !isOtherMonth) {
+            tooltips.push(`🇹🇼 ${holidayName}`);
+        }
+        if (japanHolidayName && !isOtherMonth) {
+            tooltips.push(`🇯🇵 ${japanHolidayName}`);
+        }
+        if (tooltips.length > 0) {
+            dayElement.setAttribute('title', tooltips.join('\n'));
         }
 
         const dayNumber = document.createElement('span');

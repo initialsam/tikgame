@@ -89,6 +89,13 @@ body {
 .control-group label {
     font-weight: 600;
     color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.control-group label input[type="checkbox"] {
+    width: auto;
 }
 
 .control-group input,
@@ -98,6 +105,32 @@ body {
     border-radius: 6px;
     font-size: 0.95rem;
     font-family: var(--font-family);
+}
+
+.month-control {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.month-nav-btn {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.month-nav-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.month-control select {
+    flex: 1;
 }
 
 .control-group input:focus,
@@ -183,7 +216,7 @@ body {
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    row-gap: 2px;
+    gap: 2px;
 }
 
 .calendar-day {
@@ -203,7 +236,52 @@ body {
     background: transparent;
     transition: background-color 0.2s;
     border-radius: 4px;
-    overflow: hidden;
+    overflow: visible;
+    margin: 2px;
+}
+
+.calendar-day[title]:hover::before {
+    content: attr(title);
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 10px;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    font-size: 0.75rem;
+    white-space: pre-line;
+    border-radius: 4px;
+    z-index: 100;
+    pointer-events: none;
+    text-align: center;
+    min-width: 80px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.calendar-day::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    pointer-events: none;
+}
+
+.calendar-day.taiwan-holiday::after {
+    border-color: #d32f2f;
+}
+
+.calendar-day.japan-holiday::after {
+    border-color: #7b1fa2;
+}
+
+.calendar-day.taiwan-holiday.japan-holiday::after {
+    border-width: 3px;
+    border-image: linear-gradient(135deg, #d32f2f 0%, #d32f2f 50%, #7b1fa2 50%, #7b1fa2 100%) 1;
 }
 
 .calendar-day:hover {
@@ -218,6 +296,11 @@ body {
 
 .calendar-day.weekend {
     color: #d32f2f;
+    font-weight: 600;
+}
+
+.calendar-day.japan-holiday {
+    color: #7b1fa2;
     font-weight: 600;
 }
 

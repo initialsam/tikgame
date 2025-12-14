@@ -22,20 +22,24 @@
 
                 <div class="control-group">
                     <label for="monthInput">月份：</label>
-                    <select id="monthInput">
-                        <option value="0">1月</option>
-                        <option value="1">2月</option>
-                        <option value="2">3月</option>
-                        <option value="3">4月</option>
-                        <option value="4">5月</option>
-                        <option value="5">6月</option>
-                        <option value="6">7月</option>
-                        <option value="7">8月</option>
-                        <option value="8">9月</option>
-                        <option value="9">10月</option>
-                        <option value="10">11月</option>
-                        <option value="11">12月</option>
-                    </select>
+                    <div class="month-control">
+                        <button id="prevMonthBtn" class="month-nav-btn">◀</button>
+                        <select id="monthInput">
+                            <option value="0">1月</option>
+                            <option value="1">2月</option>
+                            <option value="2">3月</option>
+                            <option value="3">4月</option>
+                            <option value="4">5月</option>
+                            <option value="5">6月</option>
+                            <option value="6">7月</option>
+                            <option value="7">8月</option>
+                            <option value="8">9月</option>
+                            <option value="9">10月</option>
+                            <option value="10">11月</option>
+                            <option value="11">12月</option>
+                        </select>
+                        <button id="nextMonthBtn" class="month-nav-btn">▶</button>
+                    </div>
                 </div>
 
                 <div class="control-group">
@@ -44,6 +48,20 @@
                         <option value="0">週日</option>
                         <option value="1">週一</option>
                     </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="showTaiwanHolidays">
+                        <input type="checkbox" id="showTaiwanHolidays" checked>
+                        顯示台灣假日
+                    </label>
+                </div>
+
+                <div class="control-group">
+                    <label for="showJapanHolidays">
+                        <input type="checkbox" id="showJapanHolidays">
+                        顯示日本假日
+                    </label>
                 </div>
 
                 <div class="control-group">
